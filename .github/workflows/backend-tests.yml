@@ -1,0 +1,78 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+
+jobs:
+  test:
+    name: Run Backend Tests
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11.7']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: 'backend/requirements.txt'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libopenslide0 \
+            libopenslide-dev \
+            libgeos-dev \
+            libproj-dev
+
+      - name: Install Python dependencies
+        working-directory: ./backend
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-cov pytest-mock
+
+      - name: Run tests with coverage
+        working-directory: ./backend
+        env:
+          SLIDEKICK_SLIDES_DIR: ${{ runner.temp }}/test_slides
+          SLIDEKICK_DEVICE: cpu
+          SLIDEKICK_BATCH_SIZE: 2
+          SLIDEKICK_ALLOW_UNTRUSTED_MODEL_LOAD: true
+        run: |
+          echo "Creating slides dir: $SLIDEKICK_SLIDES_DIR"
+          mkdir -p "$SLIDEKICK_SLIDES_DIR"
+          # This command does 3 things:
+          # 1. Fails the build if coverage is < 99% (--cov-fail-under)
+          # 2. Creates a Markdown table for the GitHub Summary page
+          # 3. Creates an HTML folder for deep-diving into code lines
+          pytest tests/ \
+            --cov=app \
+            --cov-branch \
+            --cov-fail-under=99 \
+            --cov-report=markdown >> $GITHUB_STEP_SUMMARY \
+            --cov-report=html:htmlcov \
+            -v
+
+      - name: Upload HTML report as Artifact
+        if: always() # Upload even if tests fail so you can see why coverage was low
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: backend/htmlcov/

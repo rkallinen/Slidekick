@@ -1,0 +1,31 @@
+# Core
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.18
+sse-starlette>=2.1.0
+
+# Async DB
+sqlalchemy[asyncio]>=2.0.36
+asyncpg>=0.30.0
+geoalchemy2>=0.15.2
+
+# Spatial / WSI
+openslide-python>=1.3.1
+tiatoolbox>=1.6.0
+Pillow>=11.0.0
+numpy>=1.26.0
+shapely>=2.0.6
+torch>=2.5.0
+torchvision>=0.20.0
+
+# Zarr dependencies - pin for compatibility
+zarr>=2.18.0,<3.0.0
+numcodecs>=0.12.0,<0.14.0
+
+# Config
+pydantic-settings>=2.6.0
+
+# Dev
+httpx>=0.28.0
+pytest>=8.3.0
+pytest-asyncio>=0.24.0

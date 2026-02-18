@@ -1,0 +1,31 @@
+# version: "3.9"
+
+services:
+  # ──────────────────────────────────────────────
+  # PostgreSQL 16 + PostGIS 3.4
+  # ──────────────────────────────────────────────
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: slidekick-db
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    # Load environment variables from an external file to avoid committing
+    # secrets into source control. Fill a local `.env` (ignored by git) with
+    # the POSTGRES_* variables. See `.env` for a commented template.
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/app/spatial/schema.sql:/docker-entrypoint-initdb.d/01_postgis.sql
+    healthcheck:
+      # Use environment variable expansion so the healthcheck uses the
+      # credentials provided via the env_file at runtime.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    platform: linux/amd64
+
+volumes:
+  pgdata:
