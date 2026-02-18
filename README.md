@@ -6,6 +6,12 @@ Slidekick is a local-first web application for computational pathology. It allow
 
 ---
 
+## Quick Demo
+
+https://github.com/user-attachments/assets/112c2185-1ffc-4c45-8875-ae3b8e2791dc
+
+---
+
 ## Table of Contents
 
 - [Features](#features)
