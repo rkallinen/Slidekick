@@ -279,6 +279,24 @@ Slidekick/
 
 ---
 
-## License
+## License & Attributions
+
+### License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
+
+### Model & Data License
+This project utilizes the **HoVer-Net** architecture via **TIAToolbox** with pre-trained weights from the **PanNuke** dataset. 
+
+* **Weights License:** The pre-trained weights are subject to the **[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)** license.
+* **Commercial Restriction:** These pre-trained weights are restricted to **non-commercial** purposes only. Any derivative works utilizing these weights must be distributed under the same license.
+
+### Acknowledgments & Dependencies
+This project's core functionality relies on the following research and tools. If you use this work, please ensure you also credit the primary authors of these dependencies:
+
+* **TIAToolbox:** Used for digital pathology image processing. 
+  * *Pocock, J., et al. (2022). [TIAToolbox: an end-to-end open-source Python toolbox for deep learning in digital pathology](https://doi.org/10.1038/s43856-022-00186-5).*
+* **HoVer-Net:** The underlying model architecture used for nuclei segmentation and classification. 
+  * *Graham, S., et al. (2019). [HoVer-Net: Simultaneous segmentation and classification of nuclei in multi-tissue histology images](https://doi.org/10.1016/j.media.2019.101563).*
+* **PanNuke Dataset:** The dataset used to generate the pre-trained weights utilized in this project. 
+  * *Gamper, J., et al. (2019). [PanNuke: An Open Pan-Cancer Histology Dataset for Nuclei Instance Segmentation and Classification](https://doi.org/10.1007/978-3-030-23937-4_2).*
